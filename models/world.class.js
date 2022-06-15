@@ -5,18 +5,48 @@ class World {
         new Chicken(),
         new Chicken()
     ];
+    clouds = [
+        new Cloud()
+    ];
+    backgroundobjects = [
+        new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+        new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0)
+    ]
+    canvas;
     ctx;
 
     constructor(canvas) {
         this.ctx = canvas.getContext('2d');
+        this.canvas = canvas;
         this.draw();
 
     }
 
     draw() {
-        this.ctx.drawImage(this.character.img, this.character.x, this.character.y, this.character.width, this.character.height);
-        for (let i = 0; i < this.enemies.length; i++) {
-            this.ctx.drawImage(this.enemies[i].img, (this.enemies[i].x)+100*i+200, this.enemies[i].y, this.enemies[i].width, this.enemies[i].height);
-        }
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.addObjectsToMap(this.backgroundobjects);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.enemies);
+        this.addObjectsToMap(this.clouds);
+
+
+        //Draw() wird immer wieder aufgerufen
+        let self = this;
+        requestAnimationFrame(function () {
+            self.draw();
+        });
+    }
+
+    addObjectsToMap(objects) {
+        objects.forEach(o => {
+            this.addToMap(o);
+        });
+    }
+
+    addToMap(mo) {
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height);
     }
 }
+
