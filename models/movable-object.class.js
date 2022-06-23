@@ -4,10 +4,10 @@ class MovableObject {
     img;
     height = 150;
     width = 100;
+    imageCache = {};
     speed = 0.15;
     currentImage = 0;
-    imageCache = {};
-
+    otherDirection = false;
 
     loadImage(path) {
         this.img = new Image();
@@ -22,8 +22,11 @@ class MovableObject {
         });
     }
 
-    moveRight() {
-        console.log('Moving right');
+    playAnimation(images) {
+        let i = this.currentImage % this.IMAGES_WALKING.length;
+        let path = images[i];
+        this.img.src = this.imageCache[path];
+        this.currentImage++;
     }
 
     moveLeft() {
