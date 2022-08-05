@@ -5,6 +5,9 @@ class World {
     ctx;
     keyboard;
     camera_x = 0;
+    statusBarHealth = new StatusBarHealth();
+    statusBarCoin = new StatusBarCoin();
+    statusBarBottle = new StatusBarBottle();
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -13,6 +16,7 @@ class World {
         this.draw();
         this.setWorld();
         this.checkCollisions();
+        this.checkCoinCollections();
     }
 
     setWorld() {
@@ -23,13 +27,32 @@ class World {
         setInterval(() => {
             this.level.enemies.forEach((enemy) => {
                 if (this.character.isColliding(enemy)) {
-                    this.character.hit();
-                    console.log(this.character.energy);
-                    if (this.character.y < 100)
-                        console.log('chicken killed')
+                    if (this.character.y < 100 && !this.character.isHurt()) { // if character kills the enemy during the collision
+                        this.character.killChicken(enemy);
+                        this.character.speedY = 15;
+                    } else {
+                        this.character.hit();
+                        this.statusBarHealth.setPercentage(this.character.energy);
+                        console.log(this.character.energy);
+                    }
                 }
             });
-        }, 200);
+        }, 50);
+    }
+
+    checkCoinCollections() {
+        setInterval(() => {
+            this.level.clouds.forEach((coin) => {
+                if (this.character.isCollecting(coin) && coin instanceof Coin) {
+                    coin.x = -5000;
+                    this.statusBarCoin.percentage += 20;
+                    this.statusBarCoin.setPercentage(this.statusBarCoin.percentage);
+                }
+                if (this.character.isCollecting(coin) && coin instanceof Bottle) {
+                    coin.x = -5000;
+                }
+            });
+        }, 50);
     }
 
     draw() {
@@ -43,8 +66,16 @@ class World {
         this.addObjectsToMap(this.level.clouds);
 
         this.ctx.translate(-this.camera_x, 0);
+        // ------ Space for fixed objects -------
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoin);
+        this.addToMap(this.statusBarBottle);
+        this.ctx.translate(this.camera_x, 0);
 
-        //Draw() wird immer wieder aufgerufen
+        this.ctx.translate(-this.camera_x, 0);
+
+
+        // Draw() wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {
             self.draw();

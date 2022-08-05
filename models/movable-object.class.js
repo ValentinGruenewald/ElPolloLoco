@@ -1,17 +1,9 @@
-class MovableObject {
-    x = 120;
-    y = 265;
-    img;
-    height = 150;
-    width = 100;
-    imageCache = {};
+class MovableObject extends DrawableObject {
     speed = 0.15;
-    currentImage = 0;
     otherDirection = false;
     speedY = 0;
     acceleration = 2;
     energy = 100;
-
     lastHit = 0;
 
     applyGravity() {
@@ -30,34 +22,6 @@ class MovableObject {
         return this.y < 150
     }
 
-
-    loadImage(path) {
-        this.img = new Image();
-        this.img.src = path;
-    }
-
-    loadImages(arr) {
-        arr.forEach(path => {
-            let img = new Image();
-            img.src = path;
-            this.imageCache[path] = path;
-        });
-    }
-
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    drawFrame(ctx) {
-        if (this instanceof Character || this instanceof Chicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '5';
-            ctx.strokeStyle = 'blue';
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.stroke();
-        }
-    }
-
     isColliding(mo) {
         return this.x + this.width > mo.x &&
             this.y + this.height > mo.y &&
@@ -65,8 +29,15 @@ class MovableObject {
             this.y < mo.y + mo.height
     }
 
+    isCollecting(mo) {
+        return this.x > mo.x &&
+            this.x + this.width < mo.x + mo.width &&
+            this.y + 0.75 * this.height > mo.y &&
+            this.y < mo.y - 20;
+    }
+
     hit() {
-        this.energy -= 5;
+        this.energy -= 1;
 
         if (this.energy < 0) {
             this.energy = 0;
@@ -83,6 +54,10 @@ class MovableObject {
 
     isDead() {
         return this.energy == 0;
+    }
+
+    killChicken(enemy) {
+        enemy.x = -5000;
     }
 
     playAnimation(images) {
