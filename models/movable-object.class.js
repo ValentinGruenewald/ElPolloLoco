@@ -19,21 +19,37 @@ class MovableObject extends DrawableObject {
     }
 
     isAboveGround() {
-        return this.y < 150
+        if (this instanceof ThrownBottle) {
+            if (this.y > 350) {
+                this.speedY = 10;
+            }
+            return true;
+        } else {
+            return this.y < 150
+        }
     }
 
     isColliding(mo) {
-        return this.x + this.width > mo.x &&
+        return this.x + this.width - 20 > mo.x &&
             this.y + this.height > mo.y &&
             this.x < mo.x &&
             this.y < mo.y + mo.height
     }
 
     isCollecting(mo) {
-        return this.x > mo.x &&
-            this.x + this.width < mo.x + mo.width &&
-            this.y + 0.75 * this.height > mo.y &&
-            this.y < mo.y - 20;
+        if (mo instanceof Coin) {
+            return this.x > mo.x &&
+                this.x + this.width < mo.x + mo.width &&
+                this.y + 0.75 * this.height > mo.y &&
+                this.y < mo.y - 20;
+        }
+
+        if (mo instanceof Bottle) {
+            console.log();
+            return this.x + this.width > mo.x + mo.width - 10 &&
+                this.x < mo.x &&
+                this.y > 100;
+        }
     }
 
     hit() {

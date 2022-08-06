@@ -3,6 +3,7 @@ class Character extends MovableObject {
     height = 280;
     y = 150;
     speed = 4;
+    thrownBottle = new ThrownBottle();
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -77,6 +78,7 @@ class Character extends MovableObject {
             if (this.world.keyboard.UP && !this.isAboveGround()) {
                 this.jump();
             }
+
             this.world.camera_x = -this.x + 200;
         }, 1000 / 60);
 

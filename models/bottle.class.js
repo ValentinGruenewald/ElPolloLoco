@@ -1,15 +1,14 @@
-class Coin extends MovableObject {
-    y = 300;
-    width = 150;
-    height = 150;
+class Bottle extends MovableObject {
+    width = 50;
+    height = 50;
     array_x = [400, 500, 600, 700, 900];
 
 
     constructor(i) {
-        super().loadImage('img/8_coin/coin_1.png');
+        super().loadImage('img/6_salsa_bottle/1_salsa_bottle_on_ground.png');
 
-        this.y = 100 + Math.random() * 200; //number between 0 and 500
-        this.x = this.array_x[i]; //number between 0 and 500
+        this.y = 372;
+        this.x = this.array_x[i];
     }
 
     animate() {
