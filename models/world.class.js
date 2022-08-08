@@ -8,7 +8,10 @@ class World {
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    deathScreen = new DeathScreen();
     thrownBottle = [];
+    lastThrow = 0;
+    availableBottles = 0;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -57,7 +60,7 @@ class World {
             }
             if (this.character.isCollecting(collectable) && collectable instanceof Bottle) {
                 collectable.x = -5000;
-                this.thrownBottle.available_bottles++;
+                this.availableBottles++;
                 this.statusBarBottle.percentage += 20;
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage);
             }
@@ -65,11 +68,20 @@ class World {
     }
 
     checkThrow() {
-        if (this.keyboard.D) {
-            console.log('yooooo');
-            let bottle = new ThrownBottle(this.character.x, this.character.y);
+        if (this.keyboard.D && this.character.otherDirection == false && this.throwIsReady() && this.availableBottles > 0) {
+            let bottle = new ThrownBottle(this.character.x + this.character.width / 2, this.character.y + this.character.height / 2);
             this.thrownBottle.push(bottle);
+            this.lastThrow = new Date().getTime();
+            this.availableBottles--;
+            this.statusBarBottle.percentage -= 20;
+            this.statusBarBottle.setPercentage(this.statusBarBottle.percentage);
         }
+    }
+
+    throwIsReady() {
+        let timepassed = new Date().getTime() - this.lastThrow;
+        timepassed = timepassed / 1000;
+        return timepassed > 0.5;
     }
 
     draw() {
@@ -88,6 +100,7 @@ class World {
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+        this.addToMap(this.deathScreen);
         this.ctx.translate(this.camera_x, 0);
 
         this.ctx.translate(-this.camera_x, 0);

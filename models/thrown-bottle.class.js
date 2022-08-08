@@ -2,8 +2,6 @@ class ThrownBottle extends MovableObject {
     y = 300;
     width = 50;
     height = 50;
-    available_bottles = 0;
-    lastThrow = 0;
     IMAGES_SPINNING = [
         'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
         'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
@@ -19,7 +17,7 @@ class ThrownBottle extends MovableObject {
         this.x = x;
         this.y = y;
         this.animate();
-        this.throwBottle(x, y)
+        this.throwBottle(x, y);
     }
 
     animate() {
@@ -30,7 +28,6 @@ class ThrownBottle extends MovableObject {
 
 
     throwBottle(x, y) {
-        if (this.throwIsReady()) {
             this.x = x;
             this.y = y;
             this.speedY = 20;
@@ -39,13 +36,6 @@ class ThrownBottle extends MovableObject {
             setInterval(() => {
                 this.x += 10;
             }, 25);
-        }
 
-    }
-
-    throwIsReady() {
-        let timepassed = new Date().getTime() - this.lastThrow;
-        timepassed = timepassed / 1000;
-        return timepassed > 1;
     }
 }
