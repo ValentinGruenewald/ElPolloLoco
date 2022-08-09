@@ -8,18 +8,43 @@ class World {
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    startScreen = new StartScreen();
     deathScreen = new DeathScreen();
     thrownBottle = [];
     lastThrow = 0;
     availableBottles = 0;
+    startGame = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
         this.keyboard = keyboard;
-        this.draw();
-        this.setWorld();
-        this.run();
+        this.showStartScreen();
+        this.checkForGameStart();
+    }
+
+    showStartScreen() {
+        this.addToMap(this.startScreen);
+        let self = this;
+        requestAnimationFrame(function () {
+            self.showStartScreen();
+        });
+    }
+
+    checkForGameStart() {
+        setInterval(() => {
+            if (this.keyboard.ENTER == true && this.startGame == false) {
+                this.startGame = true
+            }
+            if (this.startGame == true) {
+                this.startGame = 2;
+                this.startScreen.x = -5000;
+                this.draw();
+                this.run();
+                this.setWorld();
+                this.character.startGame = true;
+            }
+        }, 50);
     }
 
     setWorld() {

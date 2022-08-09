@@ -87,59 +87,64 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.applyGravity();
         this.animate();
+        this.startGame = false;
         this.timeOfLastAction = new Date().getTime();
     }
 
     animate() {
 
         setInterval(() => {
-            this.walking_sound.pause();
-            if (!this.isDead()) {
-                if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-                    this.moveRight();
-                    this.otherDirection = false;
-                    this.walking_sound.play();
-                    this.timeOfLastAction = new Date().getTime();
-                }
+            if (this.startGame == true) {
+                this.walking_sound.pause();
+                if (!this.isDead()) {
+                    if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
+                        this.moveRight();
+                        this.otherDirection = false;
+                        this.walking_sound.play();
+                        this.timeOfLastAction = new Date().getTime();
+                    }
 
-                if (this.world.keyboard.LEFT && this.x > 0) {
-                    this.moveLeft();
-                    this.otherDirection = true;
-                    this.walking_sound.play();
-                    this.timeOfLastAction = new Date().getTime();
-                }
+                    if (this.world.keyboard.LEFT && this.x > 0) {
+                        this.moveLeft();
+                        this.otherDirection = true;
+                        this.walking_sound.play();
+                        this.timeOfLastAction = new Date().getTime();
+                    }
 
-                if (this.world.keyboard.UP && !this.isAboveGround()) {
-                    this.jump();
-                    this.jumping_sound.play();
-                    this.timeOfLastAction = new Date().getTime();
-                }
+                    if (this.world.keyboard.UP && !this.isAboveGround()) {
+                        this.jump();
+                        this.jumping_sound.play();
+                        this.timeOfLastAction = new Date().getTime();
+                    }
 
-                this.world.camera_x = -this.x + 200;
+                    this.world.camera_x = -this.x + 200;
+                }
             }
         }, 1000 / 60);
 
         setInterval(() => {
-            if (this.isVisible()) {
-                if (this.isDead()) {
-                    this.playAnimation(this.IMAGES_DEAD);
-                    this.death_sound.play();
-                } else if (this.isHurt()) {
-                    this.playAnimation(this.IMAGES_HURT);
-                } else if (this.isAboveGround()) {
-                    this.playAnimation(this.IMAGES_JUMPING);
-                } else {
-                    if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-                        this.playAnimation(this.IMAGES_WALKING);
-                    }
-                    else if (new Date().getTime() - this.timeOfLastAction < 2000) {
-                        this.playAnimation(this.IMAGES_IDLE);
+            if (this.startGame == true) {
+                if (this.isVisible()) {
+                    if (this.isDead()) {
+                        this.playAnimation(this.IMAGES_DEAD);
+                        this.death_sound.play();
+                    } else if (this.isHurt()) {
+                        this.playAnimation(this.IMAGES_HURT);
+                    } else if (this.isAboveGround()) {
+                        this.playAnimation(this.IMAGES_JUMPING);
                     } else {
-                        this.playAnimation(this.IMAGES_LONG_IDLE);
+                        if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+                            this.playAnimation(this.IMAGES_WALKING);
+                        }
+                        else if (new Date().getTime() - this.timeOfLastAction < 2000) {
+                            this.playAnimation(this.IMAGES_IDLE);
+                        } else {
+                            this.playAnimation(this.IMAGES_LONG_IDLE);
+                        }
                     }
+                } else {
+                    this.loadImage(this.IMAGES_DEAD[6]);
                 }
-            } else {
-                this.loadImage(this.IMAGES_DEAD[6]);
             }
         }, 50);
 
