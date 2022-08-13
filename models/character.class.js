@@ -6,6 +6,7 @@ class Character extends MovableObject {
     thrownBottle = new ThrownBottle();
     timeOfDeath = 0;
     timeOfLastAction = 0;
+    level_start_x = 0;
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -87,7 +88,6 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_LONG_IDLE);
         this.applyGravity();
         this.animate();
-        this.startGame = false;
         this.timeOfLastAction = new Date().getTime();
     }
 
@@ -104,14 +104,14 @@ class Character extends MovableObject {
                         this.timeOfLastAction = new Date().getTime();
                     }
 
-                    if (this.world.keyboard.LEFT && this.x > 0) {
+                    if (this.world.keyboard.LEFT && this.x > this.level_start_x) {
                         this.moveLeft();
                         this.otherDirection = true;
                         this.walking_sound.play();
                         this.timeOfLastAction = new Date().getTime();
                     }
 
-                    if (this.world.keyboard.UP && !this.isAboveGround()) {
+                    if (this.world.keyboard.UP && !this.isAboveGround() || this.world.keyboard.SPACE && !this.isAboveGround()) {
                         this.jump();
                         this.jumping_sound.play();
                         this.timeOfLastAction = new Date().getTime();
@@ -147,26 +147,6 @@ class Character extends MovableObject {
                 }
             }
         }, 50);
-
-    }
-
-    isVisible() {
-        if (!this.isDead()) {
-            return true
-        }
-
-        if (this.isDead() && this.timeOfDeath == 0) { // is activated when character dies
-            this.timeOfDeath = new Date().getTime();
-        }
-
-        let timepassed = new Date().getTime() - this.timeOfDeath;
-
-        if (timepassed < 200) {
-            return true
-        } else {
-            this.world.deathScreen.x = 0;
-            return false
-        }
 
     }
 

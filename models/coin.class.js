@@ -2,7 +2,7 @@ class Coin extends MovableObject {
     y = 300;
     width = 150;
     height = 150;
-    array_x = [400, 500, 600, 700, 900];
+    array_x = [400, 500, 600, 650, 700];
 
 
     constructor(i) {

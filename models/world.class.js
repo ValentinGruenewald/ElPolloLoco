@@ -1,6 +1,6 @@
 class World {
     character = new Character();
-    level = level1;
+    level;
     canvas;
     ctx;
     keyboard;
@@ -8,12 +8,15 @@ class World {
     statusBarHealth = new StatusBarHealth();
     statusBarCoin = new StatusBarCoin();
     statusBarBottle = new StatusBarBottle();
+    statusBarEndboss = new StatusBarEndboss();
     startScreen = new StartScreen();
     deathScreen = new DeathScreen();
     thrownBottle = [];
     lastThrow = 0;
     availableBottles = 0;
     startGame = false;
+    endBossBattle = false;
+    fullScreen = false;
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -37,14 +40,19 @@ class World {
                 this.startGame = true
             }
             if (this.startGame == true) {
-                this.startGame = 2;
-                this.startScreen.x = -5000;
-                this.draw();
-                this.run();
-                this.setWorld();
-                this.character.startGame = true;
+                this.startTheGame();
             }
         }, 50);
+    }
+
+    startTheGame() {
+        this.level = level1;
+        this.startGame = 2;
+        this.startScreen.x = -5000;
+        this.draw();
+        this.run();
+        this.setWorld();
+        this.character.startGame = true;
     }
 
     setWorld() {
@@ -57,13 +65,42 @@ class World {
             this.checkCollisions();
             this.checkCollections();
             this.checkThrow();
+            this.checkFullScreen();
+            this.checkForEndbossBattleStart();
+            this.checkBottleHits();
+            this.relocateBar();
         }, 25);
+    }
+
+
+    relocateBar() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy instanceof Endboss) {
+                this.statusBarEndboss.x = enemy.x;
+                this.statusBarEndboss.y = enemy.y - 30;
+            }
+        });
+    }
+
+    checkBottleHits() {
+        this.thrownBottle.forEach((bottle) => {
+            this.level.enemies.forEach(enemy => {
+                if (enemy instanceof Endboss) {
+                    if (bottle.bottleHit(enemy)) {
+                        bottle.x = -5000;
+                        enemy.hit();
+                        this.statusBarEndboss.setPercentage((enemy.energy));
+                        console.log(enemy.energy);
+                    }
+                }
+            });
+        });
     }
 
     checkCollisions() {
         this.level.enemies.forEach((enemy) => {
             if (this.character.isColliding(enemy)) {
-                if (this.character.y < 100 && !this.character.isHurt()) { // if character kills the enemy during the collision
+                if (this.character.y < 100 && !this.character.isHurt() && enemy instanceof Chicken) { // if character kills the enemy during the collision
                     this.character.killChicken(enemy);
                     this.character.speedY = 20;
                 } else {
@@ -73,7 +110,6 @@ class World {
                 }
             }
         });
-
     }
 
     checkCollections() {
@@ -93,8 +129,8 @@ class World {
     }
 
     checkThrow() {
-        if (this.keyboard.D && this.character.otherDirection == false && this.throwIsReady() && this.availableBottles > 0) {
-            let bottle = new ThrownBottle(this.character.x + this.character.width / 2, this.character.y + this.character.height / 2);
+        if (this.keyboard.D && this.ThrowIsReady() && this.availableBottles > 0) {
+            let bottle = new ThrownBottle(this.character.x + this.character.width / 2, this.character.y + this.character.height / 2, this.character.otherDirection);
             this.thrownBottle.push(bottle);
             this.lastThrow = new Date().getTime();
             this.availableBottles--;
@@ -103,10 +139,24 @@ class World {
         }
     }
 
-    throwIsReady() {
+    ThrowIsReady() {
         let timepassed = new Date().getTime() - this.lastThrow;
         timepassed = timepassed / 1000;
         return timepassed > 0.5;
+    }
+
+    checkFullScreen() {
+        if (this.keyboard.F == true) {
+            this.canvas.requestFullscreen();
+        }
+    }
+
+    checkForEndbossBattleStart() {
+        if (this.character.x > 1100 && this.endBossBattle == false) {
+            this.endBossBattle = true;
+            this.character.level_start_x = 1000;
+            this.loadEndbossBattle();
+        }
     }
 
     draw() {
@@ -119,12 +169,16 @@ class World {
         this.addObjectsToMap(this.level.enemies);
         this.addObjectsToMap(this.thrownBottle);
         this.addObjectsToMap(this.level.clouds);
+        if (this.endBossBattle == true) {
+            this.addToMap(this.statusBarEndboss);
+        }
 
         this.ctx.translate(-this.camera_x, 0);
         // ------ Space for fixed objects -------
         this.addToMap(this.statusBarHealth);
         this.addToMap(this.statusBarCoin);
         this.addToMap(this.statusBarBottle);
+
         this.addToMap(this.deathScreen);
         this.ctx.translate(this.camera_x, 0);
 
@@ -168,5 +222,42 @@ class World {
         mo.x = mo.x * -1;
     }
 
+    loadEndbossBattle() {
+        this.level = new Level([
+            new Endboss()
+        ],
+            [
+                new Cloud(),
+                new Cloud(),
+                new Cloud(),
+                new Bottle(5),
+                new Bottle(6),
+                new Bottle(7),
+                new Bottle(8),
+            ],
+            [
+                new BackgroundObject('img/5_background/layers/air.png', -719),
+                new BackgroundObject('img/5_background/layers/3_third_layer/2.png', -719),
+                new BackgroundObject('img/5_background/layers/2_second_layer/2.png', -719),
+                new BackgroundObject('img/5_background/layers/1_first_layer/2.png', -719),
+                new BackgroundObject('img/5_background/layers/air.png', 0),
+                new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 0),
+                new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 0),
+                new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 0),
+                new BackgroundObject('img/5_background/layers/air.png', 719),
+                new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719),
+                new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719),
+                new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719),
+                new BackgroundObject('img/5_background/layers/air.png', 719 * 2),
+                new BackgroundObject('img/5_background/layers/3_third_layer/1.png', 719 * 2),
+                new BackgroundObject('img/5_background/layers/2_second_layer/1.png', 719 * 2),
+                new BackgroundObject('img/5_background/layers/1_first_layer/1.png', 719 * 2),
+                new BackgroundObject('img/5_background/layers/air.png', 719 * 3),
+                new BackgroundObject('img/5_background/layers/3_third_layer/2.png', 719 * 3),
+                new BackgroundObject('img/5_background/layers/2_second_layer/2.png', 719 * 3),
+                new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3),
+            ]
+        );
+    }
 }
 

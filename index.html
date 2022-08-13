@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="img/3_enemies_chicken/chicken_normal/1_walk/3_w.png">
     <title>El Pollo Loco</title>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
@@ -17,6 +18,7 @@
     <script src="models/status-bar-health.class.js"></script>
     <script src="models/status-bar-coin.class.js"></script>
     <script src="models/status-bar-bottle.class.js"></script>
+    <script src="models/status-bar-endboss.class.js"></script>
     <script src="models/start-screen.class.js"></script>
     <script src="models/death-screen.class.js"></script>
     <script src="models/world.class.js"></script>
@@ -30,13 +32,21 @@
 </head>
 
 <body onload="init()">
-
-    <h1>El Pollo Loco</h1>
-
     <canvas id="canvas" width="720px" height="480px">
 
     </canvas>
-
+    <div class="description">
+        <div class="actions1">
+            <h2>Press Enter to start the game.</h2>
+            <h2>Once started, press F to enter fullscreen and press Escape to exit it.</h2>
+        </div>
+        <div class="actions2">
+            <h2>Press ← to move to the left.</h2>
+            <h2>Press → to move to the right.</h2>
+            <h2>Press ↑ or space to jump.</h2>
+            <h2>Press D to throw a bottle.</h2>
+        </div>
+    </div>
 </body>
 
 </html>

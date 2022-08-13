@@ -1,7 +1,7 @@
 class Bottle extends MovableObject {
     width = 50;
     height = 50;
-    array_x = [400, 500, 600, 700, 900];
+    array_x = [400, 450, 620, 700, 800, 1600, 1650, 1700, 1730];
 
 
     constructor(i) {
