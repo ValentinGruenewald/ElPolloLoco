@@ -74,6 +74,8 @@ class Character extends MovableObject {
     walking_sound = new Audio('audio/walking.mp3');
     death_sound = new Audio('audio/death.mp3');
     jumping_sound = new Audio('audio/jump.mp3');
+    hurt_sound = new Audio('audio/character-hurt.mpeg');
+    idle_sound = new Audio('audio/character-idle.mpeg');
 
 
 
@@ -99,6 +101,7 @@ class Character extends MovableObject {
                 if (!this.isDead()) {
                     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
                         this.moveRight();
+                        this.idle_sound.pause();
                         this.otherDirection = false;
                         this.walking_sound.play();
                         this.timeOfLastAction = new Date().getTime();
@@ -106,6 +109,7 @@ class Character extends MovableObject {
 
                     if (this.world.keyboard.LEFT && this.x > this.level_start_x) {
                         this.moveLeft();
+                        this.idle_sound.pause();
                         this.otherDirection = true;
                         this.walking_sound.play();
                         this.timeOfLastAction = new Date().getTime();
@@ -113,6 +117,7 @@ class Character extends MovableObject {
 
                     if (this.world.keyboard.UP && !this.isAboveGround() || this.world.keyboard.SPACE && !this.isAboveGround()) {
                         this.jump();
+                        this.idle_sound.pause();
                         this.jumping_sound.play();
                         this.timeOfLastAction = new Date().getTime();
                     }
@@ -130,6 +135,7 @@ class Character extends MovableObject {
                         this.death_sound.play();
                     } else if (this.isHurt()) {
                         this.playAnimation(this.IMAGES_HURT);
+                        this.hurt_sound.play();
                     } else if (this.isAboveGround()) {
                         this.playAnimation(this.IMAGES_JUMPING);
                     } else {
@@ -140,6 +146,7 @@ class Character extends MovableObject {
                             this.playAnimation(this.IMAGES_IDLE);
                         } else {
                             this.playAnimation(this.IMAGES_LONG_IDLE);
+                            this.idle_sound.play();
                         }
                     }
                 } else {

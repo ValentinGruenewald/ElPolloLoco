@@ -9,12 +9,14 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/2_w.png',
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png'
     ];
+    chicken_idle = new Audio('audio/chicken-idle.mpeg');
+
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png');
         this.loadImages(this.IMAGES_WALKING);
 
-        this.x = 300 + Math.random() * 500; //number between 200 and 700
+        this.x = 400 + Math.random() * 500; //number between 200 and 700
         this.speed = 0.15 + Math.random() * 0.5;
 
         this.animate();
@@ -27,6 +29,8 @@ class Chicken extends MovableObject {
         }, 1000 / 60);
 
         setInterval(() => {
+            if (this.x == -5000) {
+            }
             this.playAnimation(this.IMAGES_WALKING);
         }, 200);
     }

@@ -17,6 +17,7 @@ class World {
     startGame = false;
     endBossBattle = false;
     fullScreen = false;
+    music = new Audio('audio/music.mpeg');
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -38,6 +39,7 @@ class World {
         setInterval(() => {
             if (this.keyboard.ENTER == true && this.startGame == false) {
                 this.startGame = true
+                this.music.play();
             }
             if (this.startGame == true) {
                 this.startTheGame();
