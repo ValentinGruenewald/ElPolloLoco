@@ -19,6 +19,7 @@ class ThrownBottle extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ]
+    bottle_throw = new Audio('audio/bottle-throw.mpeg');
 
     constructor(x, y, otherDirection) {
         super();
@@ -30,6 +31,7 @@ class ThrownBottle extends MovableObject {
         this.animate();
         this.throwBottle(x, y, otherDirection);
         this.checkForSplash();
+        this.bottle_throw.play();
     }
 
     animate() {

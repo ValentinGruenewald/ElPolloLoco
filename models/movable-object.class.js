@@ -6,6 +6,7 @@ class MovableObject extends DrawableObject {
     energy = 100;
     lastHit = 0;
     chicken_death = new Audio('audio/chicken-death.mpeg');
+    
 
     applyGravity() {
         setInterval(() => {

@@ -45,6 +45,7 @@ class Endboss extends MovableObject {
     endboss_idle = new Audio('audio/endboss-idle.mpeg');
     endboss_hurt = new Audio('audio/endboss-hurt.mpeg');
     endboss_death = new Audio('audio/endboss-death.mpeg');
+    victory = new Audio('audio/victory.mpeg');
 
 
     constructor() {
@@ -100,6 +101,7 @@ class Endboss extends MovableObject {
                 if (this.isDead()) {
                     this.playAnimation(this.IMAGES_DEAD);
                     this.endboss_death.play();
+                    this.victory.play();
 
                 } else if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);

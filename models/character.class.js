@@ -76,6 +76,7 @@ class Character extends MovableObject {
     jumping_sound = new Audio('audio/jump.mp3');
     hurt_sound = new Audio('audio/character-hurt.mpeg');
     idle_sound = new Audio('audio/character-idle.mpeg');
+    game_over = new Audio('audio/game-over.mpeg');
 
 
 
@@ -133,6 +134,8 @@ class Character extends MovableObject {
                     if (this.isDead()) {
                         this.playAnimation(this.IMAGES_DEAD);
                         this.death_sound.play();
+                        this.game_over.play();
+
                     } else if (this.isHurt()) {
                         this.playAnimation(this.IMAGES_HURT);
                         this.hurt_sound.play();

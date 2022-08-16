@@ -18,6 +18,9 @@ class World {
     endBossBattle = false;
     fullScreen = false;
     music = new Audio('audio/music.mpeg');
+    collect_coin = new Audio('audio/coin-collect.mpeg');
+    collect_bottle = new Audio('audio/bottle-collect.mpeg');
+
 
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
@@ -120,12 +123,14 @@ class World {
                 collectable.x = -5000;
                 this.statusBarCoin.percentage += 20;
                 this.statusBarCoin.setPercentage(this.statusBarCoin.percentage);
+                this.collect_coin.play();
             }
             if (this.character.isCollecting(collectable) && collectable instanceof Bottle) {
                 collectable.x = -5000;
                 this.availableBottles++;
                 this.statusBarBottle.percentage += 20;
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage);
+                this.collect_bottle.play();
             }
         });
     }
