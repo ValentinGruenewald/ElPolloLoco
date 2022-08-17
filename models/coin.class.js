@@ -3,6 +3,7 @@ class Coin extends MovableObject {
     width = 150;
     height = 150;
     array_x = [400, 500, 600, 650, 700];
+    collect_coin = new Audio('audio/coin-collect.mpeg');
 
 
     constructor(i) {
@@ -10,6 +11,7 @@ class Coin extends MovableObject {
 
         this.y = 100 + Math.random() * 200; //number between 0 and 500
         this.x = this.array_x[i]; //number between 0 and 500
+        this.checkForCollection();
     }
 
     animate() {
@@ -19,7 +21,16 @@ class Coin extends MovableObject {
             } else {
                 this.y--;
             }
-        }, 1000/25);
+        }, 1000 / 25);
 
+    }
+
+    checkForCollection() {
+        setInterval(() => {
+            if (this.x == -5000) {
+                this.x = -6000;
+                this.collect_coin.play();
+            }
+        }, 50);
     }
 }

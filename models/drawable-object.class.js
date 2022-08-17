@@ -25,7 +25,7 @@ class DrawableObject {
     }
 
     drawFrame(ctx) {
-        if (this instanceof ThrownBottle || this instanceof Endboss) {
+        if (this instanceof Endboss) {
             ctx.beginPath();
             ctx.lineWidth = '5';
             ctx.strokeStyle = 'blue';

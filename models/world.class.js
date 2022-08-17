@@ -18,8 +18,6 @@ class World {
     endBossBattle = false;
     fullScreen = false;
     music = new Audio('audio/music.mpeg');
-    collect_coin = new Audio('audio/coin-collect.mpeg');
-    collect_bottle = new Audio('audio/bottle-collect.mpeg');
 
 
     constructor(canvas, keyboard) {
@@ -93,6 +91,7 @@ class World {
                 if (enemy instanceof Endboss) {
                     if (bottle.bottleHit(enemy)) {
                         bottle.x = -5000;
+                        bottle.speed = 0;
                         enemy.hit();
                         this.statusBarEndboss.setPercentage((enemy.energy));
                         console.log(enemy.energy);
@@ -123,14 +122,12 @@ class World {
                 collectable.x = -5000;
                 this.statusBarCoin.percentage += 20;
                 this.statusBarCoin.setPercentage(this.statusBarCoin.percentage);
-                this.collect_coin.play();
             }
             if (this.character.isCollecting(collectable) && collectable instanceof Bottle) {
                 collectable.x = -5000;
                 this.availableBottles++;
                 this.statusBarBottle.percentage += 20;
                 this.statusBarBottle.setPercentage(this.statusBarBottle.percentage);
-                this.collect_bottle.play();
             }
         });
     }
@@ -210,7 +207,7 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-        mo.drawFrame(this.ctx);
+       // mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);

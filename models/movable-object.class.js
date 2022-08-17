@@ -5,7 +5,6 @@ class MovableObject extends DrawableObject {
     acceleration = 2;
     energy = 100;
     lastHit = 0;
-    chicken_death = new Audio('audio/chicken-death.mpeg');
     
 
     applyGravity() {
@@ -120,8 +119,6 @@ class MovableObject extends DrawableObject {
 
     killChicken(enemy) {
         enemy.x = -5000;
-        this.chicken_death.play();
-
     }
 
     playAnimation(images) {

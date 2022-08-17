@@ -20,6 +20,7 @@ class ThrownBottle extends MovableObject {
         'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
     ]
     bottle_throw = new Audio('audio/bottle-throw.mpeg');
+    bottle_splash = new Audio('audio/bottle-splash.mpeg');
 
     constructor(x, y, otherDirection) {
         super();
@@ -79,6 +80,7 @@ class ThrownBottle extends MovableObject {
         let timespan = new Date().getTime() - this.timeOfSplash;
         if (timespan < 90) {
             this.playAnimation(this.IMAGES_SPLASH);
+            this.bottle_splash.play();
         } else {
             this.x = -5000;
         }
