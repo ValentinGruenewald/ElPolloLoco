@@ -67,7 +67,9 @@ class Endboss extends MovableObject {
             let timeAlive = (new Date().getTime() - this.timeOfSpawn) / 1000; // calculates the timespan from the spawn of the endboss until the current time
             if (!this.isDead()) {
                 if (timeAlive > 10) {
-                    this.x -= 2;
+                    if (this.x > 1000) {
+                        this.x -= 2;
+                    }
                 } else if (timeAlive > 5) {
                     if (this.y < 45) {
                         this.y += 10;
@@ -102,12 +104,15 @@ class Endboss extends MovableObject {
                     this.playAnimation(this.IMAGES_DEAD);
                     this.endboss_death.play();
                     this.victory.play();
-
                 } else if (this.isHurt()) {
                     this.playAnimation(this.IMAGES_HURT);
                     this.endboss_hurt.play();
                 } else if (timeAlive > 10) {
-                    this.playAnimation(this.IMAGES_WALKING);
+                    if (this.x > 1000) {
+                        this.playAnimation(this.IMAGES_WALKING);
+                    } else {
+                        this.playAnimation(this.IMAGES_ATTACK);
+                    }
                 }
                 else if (timeAlive > 7) {
                     this.playAnimation(this.IMAGES_ALERT);

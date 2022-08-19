@@ -32,7 +32,6 @@ class ThrownBottle extends MovableObject {
         this.animate();
         this.throwBottle(x, y, otherDirection);
         this.checkForSplash();
-        this.bottle_throw.play();
     }
 
     animate() {
@@ -51,6 +50,9 @@ class ThrownBottle extends MovableObject {
         this.x = x;
         if (otherDirection == true) {
             this.x -= 50;
+        }
+        if (this.x > -100) {
+            this.bottle_throw.play();
         }
         this.y = y;
         this.speedY = 20;

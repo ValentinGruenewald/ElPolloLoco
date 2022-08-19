@@ -18,6 +18,7 @@ class World {
     endBossBattle = false;
     fullScreen = false;
     music = new Audio('audio/music.mpeg');
+    timeOfVictory;
 
 
     constructor(canvas, keyboard) {
@@ -37,13 +38,13 @@ class World {
     }
 
     checkForGameStart() {
-        setInterval(() => {
+        let interval = setInterval(() => {
             if (this.keyboard.ENTER == true && this.startGame == false) {
                 this.startGame = true
-                this.music.play();
             }
             if (this.startGame == true) {
                 this.startTheGame();
+                clearInterval(interval);
             }
         }, 50);
     }
@@ -55,7 +56,17 @@ class World {
         this.draw();
         this.run();
         this.setWorld();
+        this.music.play();
         this.character.startGame = true;
+        this.relocateChicken();
+    }
+
+    relocateChicken() {
+        this.level.enemies.forEach(enemy => {
+            if (enemy instanceof Chicken) {
+                enemy.x = 400 + Math.random() * 500;
+            }
+        });
     }
 
     setWorld() {
@@ -71,6 +82,7 @@ class World {
             this.checkFullScreen();
             this.checkForEndbossBattleStart();
             this.checkBottleHits();
+            this.checkForDeath();
             this.relocateBar();
         }, 25);
     }
@@ -85,6 +97,12 @@ class World {
         });
     }
 
+    checkForDeath() {
+        if (this.character.timeOfDeath > 0) {
+            this.music.pause();
+        }
+    }
+
     checkBottleHits() {
         this.thrownBottle.forEach((bottle) => {
             this.level.enemies.forEach(enemy => {
@@ -95,6 +113,24 @@ class World {
                         enemy.hit();
                         this.statusBarEndboss.setPercentage((enemy.energy));
                         console.log(enemy.energy);
+                    }
+                }
+
+                if (enemy instanceof Chicken) {
+                    if (bottle.bottleHit(enemy)) {
+                        bottle.x = -5000;
+                        bottle.speed = 0;
+                        enemy.x = -5000;
+                    }
+                }
+            });
+
+            this.level.clouds.forEach(brickwall => {
+                if (brickwall instanceof Brickwall) {
+                    if (bottle.bottleHit(brickwall)) {
+                        bottle.x = -5000;
+                        bottle.speed = 0;
+                        brickwall.y += 3;
                     }
                 }
             });
@@ -159,8 +195,34 @@ class World {
         if (this.character.x > 1100 && this.endBossBattle == false) {
             this.endBossBattle = true;
             this.character.level_start_x = 1000;
+            this.checkForVictory();
             this.loadEndbossBattle();
         }
+    }
+
+    checkForVictory() {
+        let interval = setInterval(() => {
+            this.level.enemies.forEach(enemy => {
+                if (enemy instanceof Endboss) {
+                    if (enemy.timeOfDeath > 0) {
+                        clearInterval(interval);
+                        this.victory();
+                    }
+                }
+            });
+        }, 50);
+    }
+
+    victory() {
+        this.music.pause();
+        this.timeOfVictory = new Date().getTime();
+        let interval = setInterval(() => {
+            let timespan = new Date().getTime() - this.timeOfVictory;
+            if (timespan > 3000) {
+                clearInterval(interval);
+                this.startScreen.x = 0;
+            }
+        }, 50);
     }
 
     draw() {
@@ -207,7 +269,7 @@ class World {
             this.flipImage(mo);
         }
         mo.draw(this.ctx);
-       // mo.drawFrame(this.ctx);
+        // mo.drawFrame(this.ctx);
 
         if (mo.otherDirection) {
             this.flipImageBack(mo);
@@ -234,6 +296,7 @@ class World {
                 new Cloud(),
                 new Cloud(),
                 new Cloud(),
+                new Brickwall(),
                 new Bottle(5),
                 new Bottle(6),
                 new Bottle(7),
