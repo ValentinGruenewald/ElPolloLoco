@@ -18,7 +18,7 @@ class World {
     endBossBattle = false;
     fullScreen = false;
     music = new Audio('audio/music.mpeg');
-    timeOfVictory;
+    victorious = false;
 
 
     constructor(canvas, keyboard) {
@@ -27,6 +27,7 @@ class World {
         this.keyboard = keyboard;
         this.showStartScreen();
         this.checkForGameStart();
+        this.draw();
     }
 
     showStartScreen() {
@@ -53,7 +54,6 @@ class World {
         this.level = level1;
         this.startGame = 2;
         this.startScreen.x = -5000;
-        this.draw();
         this.run();
         this.setWorld();
         this.music.play();
@@ -112,7 +112,6 @@ class World {
                         bottle.speed = 0;
                         enemy.hit();
                         this.statusBarEndboss.setPercentage((enemy.energy));
-                        console.log(enemy.energy);
                     }
                 }
 
@@ -146,7 +145,6 @@ class World {
                 } else {
                     this.character.hit();
                     this.statusBarHealth.setPercentage(this.character.energy);
-                    console.log(this.character.energy);
                 }
             }
         });
@@ -215,42 +213,48 @@ class World {
 
     victory() {
         this.music.pause();
-        this.timeOfVictory = new Date().getTime();
+        let timeOfVictory = new Date().getTime();
+        console.log(this.timeOfVictory);
         let interval = setInterval(() => {
-            let timespan = new Date().getTime() - this.timeOfVictory;
+            let timespan = new Date().getTime() - timeOfVictory;
             if (timespan > 3000) {
+                this.victorious = true;
                 clearInterval(interval);
-                this.startScreen.x = 0;
             }
         }, 50);
     }
 
     draw() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (this.startGame == false || this.victorious == true) {
+            this.addToMap(this.startScreen);
+            this.startScreen.x = 0;
+        } else {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        this.ctx.translate(this.camera_x, 0);
+            this.ctx.translate(this.camera_x, 0);
 
-        this.addObjectsToMap(this.level.backgroundobjects);
-        this.addToMap(this.character);
-        this.addObjectsToMap(this.level.enemies);
-        this.addObjectsToMap(this.thrownBottle);
-        this.addObjectsToMap(this.level.clouds);
-        if (this.endBossBattle == true) {
-            this.addToMap(this.statusBarEndboss);
+            this.addObjectsToMap(this.level.backgroundobjects);
+            this.addToMap(this.character);
+            this.addObjectsToMap(this.level.enemies);
+            this.addObjectsToMap(this.thrownBottle);
+            this.addObjectsToMap(this.level.clouds);
+            if (this.endBossBattle == true) {
+                this.addToMap(this.statusBarEndboss);
+            }
+
+            this.ctx.translate(-this.camera_x, 0);
+            // ------ Space for fixed objects -------
+            this.addToMap(this.statusBarHealth);
+            this.addToMap(this.statusBarCoin);
+            this.addToMap(this.statusBarBottle);
+
+            this.addToMap(this.deathScreen);
+
+            this.ctx.translate(this.camera_x, 0);
+
+            this.ctx.translate(-this.camera_x, 0);
+
         }
-
-        this.ctx.translate(-this.camera_x, 0);
-        // ------ Space for fixed objects -------
-        this.addToMap(this.statusBarHealth);
-        this.addToMap(this.statusBarCoin);
-        this.addToMap(this.statusBarBottle);
-
-        this.addToMap(this.deathScreen);
-        this.ctx.translate(this.camera_x, 0);
-
-        this.ctx.translate(-this.camera_x, 0);
-
-
         // Draw() wird immer wieder aufgerufen
         let self = this;
         requestAnimationFrame(function () {

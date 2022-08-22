@@ -61,7 +61,6 @@ class MovableObject extends DrawableObject {
         }
 
         if (mo instanceof Bottle) {
-            console.log();
             return this.x + this.width > mo.x + mo.width - 10 &&
                 this.x < mo.x &&
                 this.y > 100;

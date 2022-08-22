@@ -1,0 +1,12 @@
+.description {
+    width: 720px;
+    height: 480px;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h2 {
+    font-size: 40px;
+}

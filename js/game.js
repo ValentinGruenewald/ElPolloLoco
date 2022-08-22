@@ -35,6 +35,8 @@ window.addEventListener('keydown', (e) => {
 
     if (e.keyCode == "13") {
         keyboard.ENTER = true;
+        document.getElementById('instruction1').classList.add('d-none');
+        document.getElementById('instruction2').classList.remove('d-none');
     }
 
     if (e.keyCode == "70") {

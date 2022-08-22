@@ -22,26 +22,20 @@ canvas {
 
 .description {
     height: 25vh;
-    width: 100%;
+    min-width: 50%;
+    max-width: 90vw;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    flex-direction: column;
 }
 
-.actions1 {
-    width: 80%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+#instruction1 {
+    cursor: pointer;
 }
 
-.actions2 {
-    width: 80%;
-    display: flex;
-    justify-content: space-evenly;
-    flex-direction: row;
+a {
+text-decoration: none;
+color: black;
 }
 
 h1 {
@@ -52,15 +46,11 @@ h1 {
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
+.d-none {
+    display: none;
+}
 
 @media (max-height: 900px) {
-    .description {
-        display: none;
-    }
-
-    h1, h2 {
-        display: none
-    }
 
     body {
         height: 100vh;
