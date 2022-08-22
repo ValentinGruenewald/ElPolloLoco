@@ -82,6 +82,11 @@ h1 {
     height: 30px;
 }
 
+.mobile-buttons div button h2 {
+    text-decoration: none;
+    color: black;
+}
+
 @media (max-width: 1000px) {
 
     canvas {
@@ -133,14 +138,14 @@ h1 {
 
 @media (max-width: 370px) {
     body {
-        background-size:auto;
+        background-size: auto;
     }
 
     .mobile-buttons button {
         width: 40px;
         height: 40px;
     }
-    
+
     .mobile-buttons button img {
         width: 20px;
         height: 20px;
