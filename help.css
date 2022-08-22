@@ -1,12 +1,49 @@
-.description {
-    width: 720px;
-    height: 480px;
+h2 {
+    font-size: 40px;
+}
+
+.controls {
+    width: auto;
+    height: auto;
     border: 1px solid black;
     border-radius: 5px;
     background-color: rgba(0, 0, 0, 0.1);
     padding: 30px;
+    margin: 50px;
 }
 
-h2 {
-    font-size: 40px;
+@media (max-width: 800px) {
+
+    .controls {
+        width: auto;
+        height: auto;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 300px) {
+    h2 {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 700px) {
+    .controls {
+        padding: 10px;
+        margin: 10px;
+    }
+}
+
+@media (max-height: 720px) {
+    h2 {
+        font-size: 20px;
+    }
+
+    .controls {
+        padding: 10px;
+        margin: 10px;
+    }
 }
