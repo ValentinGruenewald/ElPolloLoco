@@ -221,6 +221,7 @@ class World {
                 this.victorious = true;
                 clearInterval(interval);
                 this.character.startGame = false;
+                this.character.walking_sound.pause();
             }
         }, 50);
     }
