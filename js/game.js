@@ -6,6 +6,63 @@ let keyboard = new Keyboard();
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
+    bindBtsPressEvents();
+}
+
+function bindBtsPressEvents() {
+    document.getElementById('btnLeft').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = true;
+    })
+
+    document.getElementById('btnLeft').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false;
+    })
+
+    document.getElementById('btnRight').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = true;
+    })
+
+    document.getElementById('btnRight').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    })
+
+    document.getElementById('btnJump').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.UP = true;
+    })
+
+    document.getElementById('btnJump').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.UP = false;
+    })
+
+    document.getElementById('btnThrow').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.D = true;
+    })
+
+    document.getElementById('btnThrow').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.D = false;
+    })
+
+    document.getElementById('btnStart').addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.ENTER = true;
+        document.getElementById('instruction1').classList.add('d-none');
+        document.getElementById('instruction2').classList.remove('d-none');
+        document.getElementById('btnStart').classList.add('d-none');
+        document.getElementById('btnRefresh').classList.remove('d-none');
+    })
+
+    document.getElementById('btnStart').addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.ENTER = false;
+    })
 }
 
 window.addEventListener('keydown', (e) => {
@@ -37,6 +94,8 @@ window.addEventListener('keydown', (e) => {
         keyboard.ENTER = true;
         document.getElementById('instruction1').classList.add('d-none');
         document.getElementById('instruction2').classList.remove('d-none');
+        document.getElementById('btnStart').classList.add('d-none');
+        document.getElementById('btnRefresh').classList.remove('d-none');
     }
 
     if (e.keyCode == "70") {

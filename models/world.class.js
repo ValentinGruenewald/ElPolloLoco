@@ -220,6 +220,7 @@ class World {
             if (timespan > 3000) {
                 this.victorious = true;
                 clearInterval(interval);
+                this.character.startGame = false;
             }
         }, 50);
     }

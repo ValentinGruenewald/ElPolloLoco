@@ -18,6 +18,7 @@ canvas {
     height: 85vh;
     max-width: 90vw;
     display: block;
+    max-height: 80%;
 }
 
 .description {
@@ -34,8 +35,8 @@ canvas {
 }
 
 a {
-text-decoration: none;
-color: black;
+    text-decoration: none;
+    color: black;
 }
 
 h1 {
@@ -47,15 +48,101 @@ h1 {
 }
 
 .d-none {
-    display: none;
+    display: none !important;
 }
 
-@media (max-height: 900px) {
+.mobile-buttons {
+    display: none;
+    margin: 10px;
+    justify-content: space-between;
+    width: 92%;
+}
+
+.mobile-buttons div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mobile-buttons button {
+    background-color: orange;
+    width: 50px;
+    height: 50px;
+    border: 2px solid black;
+    border-radius: 100%;
+    margin: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mobile-buttons button img {
+    width: 30px;
+    height: 30px;
+}
+
+@media (max-width: 1000px) {
+
+    canvas {
+        height: auto;
+        width: auto;
+    }
 
     body {
         height: 100vh;
         justify-content: center;
     }
+
+    .description {
+        display: none;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .mobile-buttons {
+        display: flex;
+    }
 }
 
-@media (max-height: 900px) {}
+
+@media (max-height: 660px) {
+    .description {
+        display: none;
+    }
+
+    h1 {
+        display: none;
+    }
+
+    .mobile-buttons {
+        display: flex;
+    }
+}
+
+
+@media (max-height: 460px) {
+    canvas {
+        height: auto;
+        width: auto;
+    }
+
+}
+
+@media (max-width: 370px) {
+    body {
+        background-size:auto;
+    }
+
+    .mobile-buttons button {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .mobile-buttons button img {
+        width: 20px;
+        height: 20px;
+    }
+}
