@@ -149,7 +149,9 @@ class Character extends MovableObject {
                             this.playAnimation(this.IMAGES_IDLE);
                         } else {
                             this.playAnimation(this.IMAGES_LONG_IDLE);
-                            this.idle_sound.play();
+                            if (this.x > 120 || this.x < 120 || this.y < 150) {
+                                this.idle_sound.play();
+                            }
                         }
                     }
                 } else {

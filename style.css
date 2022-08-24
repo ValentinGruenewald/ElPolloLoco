@@ -52,6 +52,8 @@ h1 {
 }
 
 .mobile-buttons {
+    position: absolute;
+    bottom: 10px;
     display: none;
     margin: 10px;
     justify-content: space-between;
@@ -90,8 +92,12 @@ h1 {
 @media (max-width: 1000px) {
 
     canvas {
-        height: auto;
         width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: 100%;
+        width: 100%;
+        height: auto;
     }
 
     body {
@@ -114,6 +120,13 @@ h1 {
 
 
 @media (max-height: 660px) {
+    canvas {
+        max-width: 100%;
+        max-height: 100%;
+        height: auto;
+        width: auto;
+    }
+
     .description {
         display: none;
     }
@@ -134,6 +147,13 @@ h1 {
         width: auto;
     }
 
+}
+
+@media (max-height: 360px) {
+    .mobile-buttons {
+        margin: 0px;
+        bottom: 5px;
+    }
 }
 
 @media (max-width: 370px) {

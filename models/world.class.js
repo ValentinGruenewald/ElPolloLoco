@@ -56,7 +56,10 @@ class World {
         this.startScreen.x = -5000;
         this.run();
         this.setWorld();
-        this.music.play();
+        let htmlCode = document.getElementsByTagName('html')[0].innerHTML;
+        if (!htmlCode.includes('restarted-game.js')) { //music is only being played when the game has not been restarted already
+            this.music.play();
+        }
         this.character.startGame = true;
         this.relocateChicken();
     }
@@ -84,9 +87,15 @@ class World {
             this.checkBottleHits();
             this.checkForDeath();
             this.relocateBar();
+            this.checkFirstInteraction();
         }, 25);
     }
 
+    checkFirstInteraction() {
+        if (this.character.x > 120 || this.character.x < 120 || this.character.y < 150) {
+            this.music.play();
+        }
+    }
 
     relocateBar() {
         this.level.enemies.forEach(enemy => {
