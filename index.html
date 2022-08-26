@@ -14,6 +14,7 @@
             src: url('fonts/zabars.ttf') format('truetype');
         }
     </style>
+    <script src="js/assetFunctions.js"></script>
     <script src="models/drawable-object.class.js"></script>
     <script src="models/movable-object.class.js"></script>
     <script src="models/character.class.js"></script>
@@ -44,10 +45,10 @@
 
     </canvas>
     <div class="description">
-        <h2 id="instruction1">Press Enter to start the game</h2>
-        <a href="index2.html">
-            <h2 id="instruction2" class="d-none">Restart game</h2>
-        </a>
+        <h2 id="instruction1" onclick="startGame()">Press Enter to start the game</h2>
+
+        <h2 id="instruction2" onclick="restartGame()" class="d-none">Restart game</h2>
+
         <a href="help.html">
             <h2>Help / Controls</h2>
         </a>
@@ -62,7 +63,7 @@
             <button id="btnStart">
                 <h2>Go</h2>
             </button>
-            <a href="index2.html"><button id="btnRefresh" class="d-none"><img src="img/10_icons/refresh.png"></button></a>
+            <button id="btnRefresh" onclick="restartGame()" class="d-none"><img src="img/10_icons/refresh.png"></button>
         </div>
         <div>
             <button id="btnJump"><img src="img/10_icons/arrow-up.png"></button>

@@ -21,6 +21,7 @@ class World {
     victorious = false;
 
 
+
     constructor(canvas, keyboard) {
         this.ctx = canvas.getContext('2d');
         this.canvas = canvas;
@@ -28,6 +29,10 @@ class World {
         this.showStartScreen();
         this.checkForGameStart();
         this.draw();
+    }
+
+    stopGame() {
+        console.log(intervalIds);
     }
 
     showStartScreen() {
@@ -39,7 +44,7 @@ class World {
     }
 
     checkForGameStart() {
-        let interval = setInterval(() => {
+        let interval = setStoppableInterval(() => {
             if (this.keyboard.ENTER == true && this.startGame == false) {
                 this.startGame = true
             }
@@ -56,18 +61,28 @@ class World {
         this.startScreen.x = -5000;
         this.run();
         this.setWorld();
-        let htmlCode = document.getElementsByTagName('html')[0].innerHTML;
-        if (!htmlCode.includes('restarted-game.js')) { //music is only being played when the game has not been restarted already
-            this.music.play();
-        }
+        this.music.play();
         this.character.startGame = true;
         this.relocateChicken();
+        this.relocateCollectables();
     }
 
     relocateChicken() {
         this.level.enemies.forEach(enemy => {
             if (enemy instanceof Chicken) {
-                enemy.x = 400 + Math.random() * 500;
+                enemy.x = 300 + Math.random() * 700;
+            }
+        });
+    }
+
+    relocateCollectables() {
+        this.level.clouds.forEach(collectable => {
+            if (collectable instanceof Coin) {
+                collectable.x = 300 + Math.random() * 500;
+            }
+
+            if (collectable instanceof Bottle) {
+                collectable.x = 300 + Math.random() * 500;
             }
         });
     }
@@ -78,7 +93,7 @@ class World {
 
 
     run() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.checkCollisions();
             this.checkCollections();
             this.checkThrow();
@@ -87,14 +102,7 @@ class World {
             this.checkBottleHits();
             this.checkForDeath();
             this.relocateBar();
-            this.checkFirstInteraction();
         }, 25);
-    }
-
-    checkFirstInteraction() {
-        if (this.character.x > 120 || this.character.x < 120 || this.character.y < 150) {
-            this.music.play();
-        }
     }
 
     relocateBar() {
@@ -115,34 +123,45 @@ class World {
     checkBottleHits() {
         this.thrownBottle.forEach((bottle) => {
             this.level.enemies.forEach(enemy => {
-                if (enemy instanceof Endboss) {
-                    if (bottle.bottleHit(enemy)) {
-                        bottle.x = -5000;
-                        bottle.speed = 0;
-                        enemy.hit();
-                        this.statusBarEndboss.setPercentage((enemy.energy));
-                    }
-                }
-
-                if (enemy instanceof Chicken) {
-                    if (bottle.bottleHit(enemy)) {
-                        bottle.x = -5000;
-                        bottle.speed = 0;
-                        enemy.x = -5000;
-                    }
-                }
+                this.checkIfBottleHitsEndboss(bottle, enemy);
+                this.checkIfBottleHitsChicken(bottle, enemy);
             });
 
             this.level.clouds.forEach(brickwall => {
-                if (brickwall instanceof Brickwall) {
-                    if (bottle.bottleHit(brickwall)) {
-                        bottle.x = -5000;
-                        bottle.speed = 0;
-                        brickwall.y += 3;
-                    }
-                }
+                this.checkIfBottleHitsBrickwall(bottle, brickwall);
             });
         });
+    }
+
+    checkIfBottleHitsEndboss(bottle, enemy) {
+        if (enemy instanceof Endboss) {
+            if (bottle.bottleHit(enemy)) {
+                bottle.x = -5000;
+                bottle.speed = 0;
+                enemy.hit();
+                this.statusBarEndboss.setPercentage((enemy.energy));
+            }
+        }
+    }
+
+    checkIfBottleHitsChicken(bottle, enemy) {
+        if (enemy instanceof Chicken) {
+            if (bottle.bottleHit(enemy)) {
+                bottle.x = -5000;
+                bottle.speed = 0;
+                enemy.x = -5000;
+            }
+        }
+    }
+
+    checkIfBottleHitsBrickwall(bottle, brickwall) {
+        if (brickwall instanceof Brickwall) {
+            if (bottle.bottleHit(brickwall)) {
+                bottle.x = -5000;
+                bottle.speed = 0;
+                brickwall.y += 3;
+            }
+        }
     }
 
     checkCollisions() {
@@ -204,11 +223,12 @@ class World {
             this.character.level_start_x = 1000;
             this.checkForVictory();
             this.loadEndbossBattle();
+            this.relocateEndbossBattleBottles();
         }
     }
 
     checkForVictory() {
-        let interval = setInterval(() => {
+        let interval = setStoppableInterval(() => {
             this.level.enemies.forEach(enemy => {
                 if (enemy instanceof Endboss) {
                     if (enemy.timeOfDeath > 0) {
@@ -223,8 +243,7 @@ class World {
     victory() {
         this.music.pause();
         let timeOfVictory = new Date().getTime();
-        console.log(this.timeOfVictory);
-        let interval = setInterval(() => {
+        let interval = setStoppableInterval(() => {
             let timespan = new Date().getTime() - timeOfVictory;
             if (timespan > 3000) {
                 this.victorious = true;
@@ -237,40 +256,43 @@ class World {
 
     draw() {
         if (this.startGame == false || this.victorious == true) {
-            this.addToMap(this.startScreen);
-            this.startScreen.x = 0;
+            this.addStartScreen;
         } else {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
             this.ctx.translate(this.camera_x, 0);
-
-            this.addObjectsToMap(this.level.backgroundobjects);
-            this.addToMap(this.character);
-            this.addObjectsToMap(this.level.enemies);
-            this.addObjectsToMap(this.thrownBottle);
-            this.addObjectsToMap(this.level.clouds);
-            if (this.endBossBattle == true) {
-                this.addToMap(this.statusBarEndboss);
-            }
-
-            this.ctx.translate(-this.camera_x, 0);
-            // ------ Space for fixed objects -------
-            this.addToMap(this.statusBarHealth);
-            this.addToMap(this.statusBarCoin);
-            this.addToMap(this.statusBarBottle);
-
-            this.addToMap(this.deathScreen);
-
+            this.drawMovableObjects();
+            this.ctx.translate(-this.camera_x, 0); //Space for fixed objects
+            this.drawFixedObjects();
             this.ctx.translate(this.camera_x, 0);
-
             this.ctx.translate(-this.camera_x, 0);
-
         }
-        // Draw() wird immer wieder aufgerufen
-        let self = this;
+        let self = this;         // Draw() wird immer wieder aufgerufen
         requestAnimationFrame(function () {
             self.draw();
         });
+    }
+
+    addStartScreen() {
+        this.addToMap(this.startScreen);
+        this.startScreen.x = 0;
+    }
+
+    drawMovableObjects() {
+        this.addObjectsToMap(this.level.backgroundobjects);
+        this.addToMap(this.character);
+        this.addObjectsToMap(this.level.enemies);
+        this.addObjectsToMap(this.thrownBottle);
+        this.addObjectsToMap(this.level.clouds);
+        if (this.endBossBattle == true) {
+            this.addToMap(this.statusBarEndboss);
+        }
+    }
+
+    drawFixedObjects() {
+        this.addToMap(this.statusBarHealth);
+        this.addToMap(this.statusBarCoin);
+        this.addToMap(this.statusBarBottle);
+        this.addToMap(this.deathScreen);
     }
 
     addObjectsToMap(objects) {
@@ -340,6 +362,14 @@ class World {
                 new BackgroundObject('img/5_background/layers/1_first_layer/2.png', 719 * 3),
             ]
         );
+    }
+
+    relocateEndbossBattleBottles() {
+        this.level.clouds.forEach(collectable => {
+            if (collectable instanceof Bottle) {
+                collectable.x = 1600 + Math.random() * 200;
+            }
+        });
     }
 }
 

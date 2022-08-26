@@ -2,7 +2,6 @@ let canvas;
 let ctx;
 let world;
 let keyboard = new Keyboard();
-
 function init() {
     canvas = document.getElementById('canvas');
     world = new World(canvas, keyboard);
@@ -42,7 +41,9 @@ function bindBtsPressEvents() {
 
     document.getElementById('btnThrow').addEventListener('touchstart', (e) => {
         e.preventDefault();
-        keyboard.D = true;
+        if (world.character.timeOfDeath == 0 && world.victorious == false) {
+            keyboard.D = true;
+        }
     })
 
     document.getElementById('btnThrow').addEventListener('touchend', (e) => {
@@ -52,11 +53,10 @@ function bindBtsPressEvents() {
 
     document.getElementById('btnStart').addEventListener('touchstart', (e) => {
         e.preventDefault();
-        keyboard.ENTER = true;
-        document.getElementById('instruction1').classList.add('d-none');
-        document.getElementById('instruction2').classList.remove('d-none');
-        document.getElementById('btnStart').classList.add('d-none');
-        document.getElementById('btnRefresh').classList.remove('d-none');
+        setTimeout(() => {
+            keyboard.ENTER = true;
+            showRestartButton();
+        }, 100);
     })
 
     document.getElementById('btnStart').addEventListener('touchend', (e) => {
@@ -86,21 +86,27 @@ window.addEventListener('keydown', (e) => {
         keyboard.SPACE = true;
     }
 
+
     if (e.keyCode == "68") {
-        keyboard.D = true;
+        if (world.character.timeOfDeath == 0 && world.victorious == false) {
+            keyboard.D = true;
+        }
     }
 
     if (e.keyCode == "13") {
         keyboard.ENTER = true;
-        document.getElementById('instruction1').classList.add('d-none');
-        document.getElementById('instruction2').classList.remove('d-none');
-        document.getElementById('btnStart').classList.add('d-none');
-        document.getElementById('btnRefresh').classList.remove('d-none');
+        showRestartButton();
     }
 
     if (e.keyCode == "70") {
         keyboard.F = true;
     }
+
+    if (e.keyCode == "82") {
+        keyboard.R = true;
+        restartGame();
+    }
+
 });
 
 window.addEventListener('keyup', (e) => {
@@ -134,5 +140,9 @@ window.addEventListener('keyup', (e) => {
 
     if (e.keyCode == "70") {
         keyboard.F = false;
+    }
+
+    if (e.keyCode == "82") {
+        keyboard.R = false;
     }
 });

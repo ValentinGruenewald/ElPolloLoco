@@ -36,7 +36,7 @@ class ThrownBottle extends MovableObject {
 
     animate() {
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.speed > 0) {
                 this.playAnimation(this.IMAGES_SPINNING);
             } else {
@@ -58,18 +58,17 @@ class ThrownBottle extends MovableObject {
         this.speedY = 20;
         this.applyGravity();
         this.lastThrow = new Date().getTime();
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (otherDirection == false) {
                 this.x += this.speed;
             } else {
                 this.x -= this.speed;
             }
         }, 25);
-
     }
 
     checkForSplash() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.timeOfSplash == 0) {
                 if (this.speed == 0) {
                     this.timeOfSplash = new Date().getTime();

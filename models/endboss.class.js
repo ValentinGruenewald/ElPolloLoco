@@ -63,7 +63,7 @@ class Endboss extends MovableObject {
 
 
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             let timeAlive = (new Date().getTime() - this.timeOfSpawn) / 1000; // calculates the timespan from the spawn of the endboss until the current time
             if (!this.isDead()) {
                 if (timeAlive > 10) {
@@ -97,7 +97,7 @@ class Endboss extends MovableObject {
             }
         }, 1000 / 25);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             let timeAlive = (new Date().getTime() - this.timeOfSpawn) / 1000; // calculates the timespan from the spawn of the endboss until the current time
             if (this.isVisible()) {
                 if (this.isDead()) {

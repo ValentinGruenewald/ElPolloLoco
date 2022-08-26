@@ -14,7 +14,7 @@ class Brickwall extends MovableObject {
     }
 
     animate() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.y < 168) {
                 this.y += 20;
             } else {
